@@ -65,15 +65,6 @@ class OrderServices
                 $order->total = $total - $cupom->value;
             }
 
-            foreach ($items as $item) {
-                $item['price'] = $this->productRepository->find($item['product_id'])->price;
-                $order->items()->create($item);
-                $total += $item['price'] * $item['qtd'];
-            }
-            $order->total = $total;
-            If (isset($cupom)) {
-                $order->total = $total - $cupom->value();
-            }
             $order->save();
             \DB::commit();
 
