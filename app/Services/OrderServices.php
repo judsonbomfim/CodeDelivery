@@ -67,12 +67,24 @@ class OrderServices
 
             $order->save();
             \DB::commit();
+            return $order;
 
         } catch (\Exception $e) {
             \DB::rollback();
             throw $e;
         }
 
+    }
+
+    public function updateStatus($id,$idDeliveryman,$status)
+    {
+        $order = $this->orderRepository->getByIdAndDeliveryman($id, $idDeliveryman);
+        if($order instanceof Order){
+            $order->status = $status;
+            $order->save();
+            return $order;
+        }
+        return false;
     }
 
 }
