@@ -2,6 +2,7 @@
 
 namespace CodeDelivery\Repositories;
 
+use Illuminate\Database\Eloquent\Collection;
 use PhpParser\Node\Stmt\If_;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
@@ -26,7 +27,7 @@ class OrderRepositoryEloquent extends BaseRepository implements OrderRepository
             'user_deliveryman_id' => $idDeliveryman
         ]);
         if($result instanceof Collection){
-            $result = $result->fist();
+            $result = $result->first();
             $result->items->each(function($item){
                 $item->product;
             });
