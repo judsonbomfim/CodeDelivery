@@ -7,7 +7,7 @@ use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use CodeDelivery\Repositories\OrderRepository;
 use CodeDelivery\Models\Order;
-use CodeDelivery\Validators\OrderValidator;
+//use CodeDelivery\Validators\OrderValidator;
 
 /**
  * Class OrderRepositoryEloquent
@@ -19,7 +19,7 @@ class OrderRepositoryEloquent extends BaseRepository implements OrderRepository
     /**
      * @return Application
      */
-    public function getByIdAndDeliveryman($id,$idDeliveryman)
+    public function getByIdAndDeliveryman($id, $idDeliveryman)
     {
         $result = $this->with(['client','items','cupom'])->findWhere([
             'id' => $id,
@@ -43,8 +43,6 @@ class OrderRepositoryEloquent extends BaseRepository implements OrderRepository
     {
         return Order::class;
     }
-
-    
 
     /**
      * Boot up the repository, pushing criteria
