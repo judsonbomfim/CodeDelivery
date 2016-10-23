@@ -3,7 +3,10 @@
 namespace CodeDelivery\Http\Controllers\Api\Client;
 
 use CodeDelivery\Http\Controllers\Controller;
+<<<<<<< HEAD
 use CodeDelivery\Http\Requests\AdminClientsRequest;
+=======
+>>>>>>> origin/master
 use CodeDelivery\Repositories\OrderRepository;
 use CodeDelivery\Repositories\ProductRepository;
 use CodeDelivery\Repositories\UserRepository;
@@ -50,7 +53,11 @@ class ClientCheckoutController extends Controller
         return $orders;
     }
 
+<<<<<<< HEAD
     public function store(AdminClientsRequest $request)
+=======
+    public function store(Request $request)
+>>>>>>> origin/master
     {
         $data = $request->all();
         $id = Authorizer::getResourceOwnerId();
