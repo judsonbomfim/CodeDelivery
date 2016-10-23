@@ -3,8 +3,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/home/', function () {
+    return view('welcome');
+});
 
-Route::group(['prefix' => 'admin', 'middleware' => 'auth.checkrole', 'as' => 'admin.'], function() {
+Route::group(['prefix' => 'admin', 'middleware' => 'auth.checkrole:admin', 'as' => 'admin.'], function() {
 
     Route::group(['prefix' => 'categories', 'as' => 'categories.'], function() {
         Route::get('/',['as'=>'index', 'uses'=> 'CategoriesController@index']);
@@ -42,10 +45,33 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth.checkrole', 'as' => 'ad
 
 });
 
-Route::group(['prefix' => 'customer', 'as' => 'customer.'], function() {
+Route::group(['prefix' => 'customer', 'middleware' => 'auth.checkrole:client', 'as' => 'customer.'], function() {
     Route::group(['prefix' => 'order', 'as' => 'order.'], function() {
         Route::get('',['as'=>'index','uses'=>'CheckoutController@index']);
         Route::get('create',['as'=>'create','uses'=>'CheckoutController@create']);
         Route::post('store',['as'=>'store','uses'=>'CheckoutController@store']);
+    });
+});
+
+Route::post('oauth/access_token', function() {
+    return Response::json(Authorizer::issueAccessToken());
+});
+
+Route::group(['prefix' => 'api', 'middleware' => 'oauth', 'as' => 'api.'], function() {
+
+    Route::group(['prefix' => 'client', 'middleware' => 'oauth.checkrole:client', 'as' => 'client.'], function() {
+        Route::resource('order',
+            'Api\Client\ClientCheckoutController', [
+                'except' => ['create', 'edit', 'destroy']
+        ]);
+    });
+    Route::group(['prefix' => 'deliveryman', 'middleware' => 'oauth.checkrole:deliveryman', 'as' => 'deliveryman.'], function() {
+        Route::resource('order',
+            'Api\Deliveryman\DeliverymanCheckoutController', [
+                'except' => ['create', 'edit', 'destroy', 'store']
+            ]);
+        Route::patch('order/{id}/update-status',[
+            'uses' =>'Api\Deliveryman\DeliverymanCheckoutController@updateStatus',
+            'as' => 'order.updates_status']);
     });
 });
